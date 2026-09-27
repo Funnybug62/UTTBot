@@ -14,6 +14,7 @@ public:
 private:
     void Draw() const;
     void DrawBoard() const;
+    void DrawPieces() const;
 
     int screenWidth;
     int screenHeight;
@@ -23,7 +24,7 @@ private:
     bool XTurn;
 
     std::bitset<81> Xstate;
-    std::bitset<81> Ystate;
+    std::bitset<81> Ostate;
 };
 
 #endif

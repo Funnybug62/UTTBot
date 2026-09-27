@@ -7,7 +7,7 @@ UTT::UTT(int screenWidth, int screenHeight, float margin)
       boardSize(screenWidth - 2 * margin),
       XTurn(true),
       Xstate(0),
-      Ystate(0) {}
+      Ostate(0) {}
 
 void UTT::Run() {
     InitWindow(screenWidth, screenHeight, "UTT");
@@ -25,7 +25,7 @@ void UTT::Run() {
 
             int bitPos = boardPosY * 9 + boardPosX;
             if (XTurn) Xstate |= (std::bitset<81>(1) << bitPos);
-            else Ystate |= (std::bitset<81>(1) << bitPos);
+            else Ostate |= (std::bitset<81>(1) << bitPos);
             
             XTurn ^= true;
         }
@@ -39,6 +39,7 @@ void UTT::Run() {
 void UTT::Draw() const {
     ClearBackground(Color{33, 33, 33, 255});
     DrawBoard();
+    DrawPieces();
 }
 
 void UTT::DrawBoard() const {
@@ -70,4 +71,24 @@ void UTT::DrawBoard() const {
     }
 
     DrawRectangleLinesEx({x - 3.0f, y - 3.0f, size + 6.0f, size + 6.0f}, 6.0f, bigLine);
+}
+
+void UTT::DrawPieces() const {
+    const float cell = boardSize / 9.0f;
+    const float r = cell * 0.28f;
+
+    const Color xColor = Color{235, 87, 87, 255};
+    const Color oColor = Color{86, 156, 235, 255};
+
+    for (int i = 0; i < 81; i++) {
+        float cx = margin + (i % 9 + 0.5f) * cell;
+        float cy = margin + (i / 9 + 0.5f) * cell;
+
+        if (Xstate[i]) {
+            DrawLineEx({cx - r, cy - r}, {cx + r, cy + r}, 5.0f, xColor);
+            DrawLineEx({cx - r, cy + r}, {cx + r, cy - r}, 5.0f, xColor);
+        } else if (Ostate[i]) {
+            DrawRing({cx, cy}, r - 2.5f, r + 2.5f, 0.0f, 360.0f, 36, oColor);
+        }
+    }
 }
