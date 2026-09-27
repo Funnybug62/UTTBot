@@ -22,7 +22,8 @@ private:
 
     bool XTurn;
 
-    std::bitset<81> state;
+    std::bitset<81> Xstate;
+    std::bitset<81> Ystate;
 };
 
 #endif

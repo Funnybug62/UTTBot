@@ -6,7 +6,8 @@ UTT::UTT(int screenWidth, int screenHeight, float margin)
       margin(margin),
       boardSize(screenWidth - 2 * margin),
       XTurn(true),
-      state(0) {}
+      Xstate(0),
+      Ystate(0) {}
 
 void UTT::Run() {
     InitWindow(screenWidth, screenHeight, "UTT");
@@ -23,10 +24,12 @@ void UTT::Run() {
             std::cout << "POS: " << boardPosX << ", " << boardPosY << std::endl;
 
             int bitPos = boardPosY * 9 + boardPosX;
-            state |= (std::bitset<81>(1) << bitPos);
-            std::cout << state << std::endl;
+            if (XTurn) Xstate |= (std::bitset<81>(1) << bitPos);
+            else Ystate |= (std::bitset<81>(1) << bitPos);
+            
+            XTurn ^= true;
         }
-        
+
         EndDrawing();
     }
 
