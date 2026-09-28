@@ -91,8 +91,26 @@ void UTT::makeMove(std::bitset<81> placed) {
 
 void UTT::Draw() const {
     ClearBackground(Color{33, 33, 33, 255});
+    DrawHover();
     DrawBoard();
     DrawPieces();
+}
+
+void UTT::DrawHover() const {
+    const float mx = GetMouseX() - margin;
+    const float my = GetMouseY() - margin;
+    if (mx < 0 || my < 0 || mx >= boardSize || my >= boardSize) return;
+
+    const float cell = boardSize / 9.0f;
+    const int x = mx / cell;
+    const int y = my / cell;
+    const int bitPos = y * 9 + x;
+    const int board = (y / 3) * 3 + (x / 3) + 1;
+
+    if (Xstate[bitPos] || Ostate[bitPos]) return;
+    if (nextBoard != -1 && nextBoard != board) return;
+
+    DrawRectangleRec({margin + x * cell, margin + y * cell, cell, cell}, Color{60, 60, 60, 255});
 }
 
 void UTT::DrawBoard() const {

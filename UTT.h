@@ -13,6 +13,7 @@ public:
 
 private:
     void Draw() const;
+    void DrawHover() const;
     void DrawBoard() const;
     void DrawPieces() const;
     void makeMove(std::bitset<81> placed);
