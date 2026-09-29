@@ -29,6 +29,13 @@ UTT::UTT(int screenWidth, int screenHeight, float margin) : screenWidth(screenWi
     sqSeven |= (rowBitsTwo)      | (rowBitsTwo << 27) | (rowBitsTwo << 54);
     sqEight |= (rowBitsTwo << 1) | (rowBitsTwo << 28) | (rowBitsTwo << 55);
     sqNine  |= (rowBitsTwo << 2) | (rowBitsTwo << 29) | (rowBitsTwo << 56);
+
+    for (size_t m{0}; m < 512; ++m) {
+        wins[m] = false;
+        
+        for (int line : lines)
+            if ((m & line) == line) { wins[m] = true; break; }
+    }
 }
 
 void UTT::Run() {
@@ -93,6 +100,7 @@ void UTT::Draw() const {
     ClearBackground(Color{33, 33, 33, 255});
     DrawHover();
     DrawBoard();
+    DrawNextBoard();
     DrawPieces();
 }
 
@@ -142,6 +150,22 @@ void UTT::DrawBoard() const {
     }
 
     DrawRectangleLinesEx({x - 3.0f, y - 3.0f, size + 6.0f, size + 6.0f}, 6.0f, bigLine);
+}
+
+void UTT::DrawNextBoard() const {
+    const Color color = XTurn ? Color{235, 87, 87, 255} : Color{86, 156, 235, 255};
+
+    if (nextBoard == -1) {
+        DrawRectangleLinesEx({margin - 3.0f, margin - 3.0f, boardSize + 6.0f, boardSize + 6.0f}, 6.0f, color);
+        return;
+    }
+
+    const float bigCell = boardSize / 3.0f;
+    const int k = nextBoard - 1;
+    const float ox = margin + (k % 3) * bigCell;
+    const float oy = margin + (k / 3) * bigCell;
+
+    DrawRectangleLinesEx({ox - 3.0f, oy - 3.0f, bigCell + 6.0f, bigCell + 6.0f}, 6.0f, color);
 }
 
 void UTT::DrawPieces() const {
