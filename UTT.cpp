@@ -41,7 +41,6 @@ UTT::UTT(int screenWidth, int screenHeight, float margin) : screenWidth(screenWi
 void UTT::Run() {
     InitWindow(screenWidth, screenHeight, "UTT");
     SetTargetFPS(60);
-    std::ifstream artFile("GameOver.txt");
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -75,10 +74,6 @@ void UTT::Run() {
 
         if (wins[(bigX | bigO).to_ulong()] || ((bigX | bigO).to_ulong()) == 0x1FF) CloseWindow();
     }
-
-    std::string line;
-    while (std::getline(artFile, line)) { std::cout << line << std::endl; }
-    artFile.close();
 
     CloseWindow();
 }
