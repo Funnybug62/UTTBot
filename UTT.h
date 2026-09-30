@@ -17,7 +17,9 @@ private:
     void DrawBoard() const;
     void DrawNextBoard() const;
     void DrawPieces() const;
+    void DrawBigPieces() const;
     void makeMove(std::bitset<81> placed);
+    int boardMask(const std::bitset<81>& state, int b) const;
 
     const int lines[8] = {
         0b000000111, 0b000111000, 0b111000000,   // rows
@@ -37,6 +39,9 @@ private:
 
     std::bitset<81> Xstate;
     std::bitset<81> Ostate;
+
+    std::bitset<9> bigX;
+    std::bitset<9> bigO;
 
     std::bitset<81> boardOne;
     std::bitset<81> boardTwo;
