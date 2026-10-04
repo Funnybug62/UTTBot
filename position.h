@@ -9,8 +9,18 @@
 class Position {
 public:
     Position();
-    void makeMove(std::bitset<81> placed);
 
+    int legalMoves(int moves[81]) const;
+    void makeMove(std::bitset<81> placed);
+    int result() const;
+
+    bool isLegal(int bitPos) const;
+    bool boardClosed(int b) const;
+
+    const std::bitset<81>& xState() const { return Xstate; }
+    const std::bitset<81>& oState() const { return Ostate; }
+    const std::bitset<9>& bigXstate() const { return bigX; }
+    const std::bitset<9>& bigOstate() const { return bigO; }
     int getNextBoard() { return nextBoard; }
     int getTurn() { return turn; }
 private:

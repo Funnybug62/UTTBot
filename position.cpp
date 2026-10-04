@@ -41,6 +41,39 @@ Position::Position() {
     nextBoard = -1;
 }
 
+int Position::result() const {
+    if (((bigX | bigO).to_ulong()) == 0x1FF) return DRAW;
+
+    if (wins[(bigX | bigO).to_ulong()]) return (turn == X) ? XWIN : OWIN;
+
+    return NONE;
+}
+
+bool Position::isLegal(int bitpos) const {
+    if (nextBoard != -1) {
+        
+    }
+}
+
+int Position::legalMoves(int moves[81]) const {
+    const std::bitset<81> occupied = (Xstate | Ostate);
+    int n = 0;
+
+    for (size_t b{0}; b < 9; ++b) {
+        if (nextBoard != -1 && b != nextBoard) continue;
+        if (boardClosed(b)) continue;
+
+        int base = (b / 3) * 27 + (b % 3) * 3;
+        for (size_t r{0}; r < 3; ++r)
+            for (size_t c{0}; c < 3; ++c) {
+                int pos = base + r * 9 + c;
+                if (!occupied[pos]) moves[n++] = pos;
+            }
+    }   
+
+    return n;
+}
+
 void Position::makeMove(std::bitset<81> placed) {
     if (turn == X) Xstate |= placed;
     else Ostate |= placed;
@@ -55,17 +88,17 @@ void Position::makeMove(std::bitset<81> placed) {
         }
     }
 
-    if ((placed & sqOne) != 0) nextBoard = 1;
-    if ((placed & sqTwo) != 0) nextBoard = 2;
-    if ((placed & sqThree) != 0) nextBoard = 3;
-    if ((placed & sqFour) != 0) nextBoard = 4;
-    if ((placed & sqFive) != 0) nextBoard = 5;
-    if ((placed & sqSix) != 0) nextBoard = 6;
-    if ((placed & sqSeven) != 0) nextBoard = 7;
-    if ((placed & sqEight) != 0) nextBoard = 8;
-    if ((placed & sqNine) != 0) nextBoard = 9;
+    if ((placed & sqOne) != 0) nextBoard = 0;
+    if ((placed & sqTwo) != 0) nextBoard = 1;
+    if ((placed & sqThree) != 0) nextBoard = 2;
+    if ((placed & sqFour) != 0) nextBoard = 3;
+    if ((placed & sqFive) != 0) nextBoard = 4;
+    if ((placed & sqSix) != 0) nextBoard = 5;
+    if ((placed & sqSeven) != 0) nextBoard = 6;
+    if ((placed & sqEight) != 0) nextBoard = 7;
+    if ((placed & sqNine) != 0) nextBoard = 8;
 
-    if (bigX[nextBoard-1] || bigO[nextBoard-1] || (boardMask((Xstate | Ostate), nextBoard-1) == 0x1FF)) nextBoard = -1;
+    if (bigX[nextBoard] || bigO[nextBoard] || (boardMask((Xstate | Ostate), nextBoard) == 0x1FF)) nextBoard = -1;
 
     turn ^= 1;
 }
@@ -79,4 +112,3 @@ int Position::boardMask(const std::bitset<81>& state, int b) const {
 
     return m;
 }
-
