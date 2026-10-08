@@ -1,6 +1,6 @@
 #include "UTT.h"
 
-UTT::UTT(int screenWidth, int screenHeight, float margin) : screenWidth(screenWidth),screenHeight(screenHeight),margin(margin),boardSize(screenWidth - 2.0f * margin),p(Position()) {
+UTT::UTT(int screenWidth, int screenHeight, float margin) : screenWidth(screenWidth),screenHeight(screenHeight),margin(margin),boardSize(screenWidth - 2.0f * margin),p(Position()),AITurn(false) {
 
 }
 
@@ -13,14 +13,21 @@ void UTT::Run() {
         const float my = GetMouseY() - margin;
         const bool onBoard = mx >= 0 && my >= 0 && mx < boardSize && my < boardSize;
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && onBoard) {
+        if (p.result() == NONE && AITurn) {
+            int bitp = eng.bestMove(p);
+            p.makeMove(std::bitset<81>(1) << bitp);
+            AITurn ^= true;
+        } else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && onBoard) {
             int boardPosX = (mx * 9) / boardSize;
             int boardPosY = (my * 9) / boardSize;
 
-            std::cout << "POS: " << boardPosX << ", " << boardPosY << std::endl;
+            // std::cout << "POS: " << boardPosX << ", " << boardPosY << std::endl;
 
             int bitPos = boardPosY * 9 + boardPosX;
-            if (p.isLegal(bitPos)) p.makeMove(std::bitset<81>(1) << bitPos);
+            if (p.isLegal(bitPos)) {
+                p.makeMove(std::bitset<81>(1) << bitPos);
+                AITurn ^= true;
+            }
         }
 
         BeginDrawing();
@@ -29,7 +36,7 @@ void UTT::Run() {
 
         EndDrawing();
 
-        if (p.result() != NONE) CloseWindow();
+        if (p.result() != NONE) break;
     }
 
     CloseWindow();

@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include "position.h"
+#include "engine.h"
 
 class UTT {
 public:
@@ -26,8 +27,10 @@ private:
     int screenHeight;
     float margin;
     float boardSize;
-
     Position p;
+    bool AITurn;
+
+    Engine eng;
 };
 
 #endif
