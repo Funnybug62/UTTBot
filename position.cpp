@@ -42,24 +42,31 @@ Position::Position() {
 }
 
 int Position::result() const {
-    if (((bigX | bigO).to_ulong()) == 0x1FF) return DRAW;
+    if (wins[bigX.to_ulong()]) return XWIN;
+    if (wins[bigO.to_ulong()]) return OWIN;
 
-    if (wins[(bigX | bigO).to_ulong()]) return (turn == X) ? XWIN : OWIN;
-
+    int moves[81];
+    if (legalMoves(moves) == 0) return DRAW;
+    
     return NONE;
 }
 
+bool Position::boardClosed(int b) const {
+    return bigX[b] || bigO[b] || boardMask(Xstate | Ostate, b) == 0x1FF;
+}
+
 bool Position::isLegal(int bitpos) const {
-    if (nextBoard != -1) {
-        
-    }
+    int moves[81];
+    int n = legalMoves(moves);
+    for (int i {0}; i < n; ++i) if (moves[i] == bitpos) return true;
+    return false;
 }
 
 int Position::legalMoves(int moves[81]) const {
     const std::bitset<81> occupied = (Xstate | Ostate);
     int n = 0;
 
-    for (size_t b{0}; b < 9; ++b) {
+    for (int b{0}; b < 9; ++b) {
         if (nextBoard != -1 && b != nextBoard) continue;
         if (boardClosed(b)) continue;
 

@@ -1,7 +1,6 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-#include <iostream>
 #include <bitset>
 #include <cstddef>
 #include "types.h"
@@ -21,8 +20,8 @@ public:
     const std::bitset<81>& oState() const { return Ostate; }
     const std::bitset<9>& bigXstate() const { return bigX; }
     const std::bitset<9>& bigOstate() const { return bigO; }
-    int getNextBoard() { return nextBoard; }
-    int getTurn() { return turn; }
+    int getNextBoard() const { return nextBoard; }
+    int getTurn() const { return turn; }
 private:
     bool wins[512];
 
