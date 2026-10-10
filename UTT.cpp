@@ -15,7 +15,7 @@ void UTT::Run() {
 
         if (p.result() == NONE && AITurn) {
             int bitp = eng.bestMove(p);
-            p.makeMove(std::bitset<81>(1) << bitp);
+            p.makeMove(bitp);
             AITurn ^= true;
         } else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && onBoard) {
             int boardPosX = (mx * 9) / boardSize;
@@ -25,7 +25,7 @@ void UTT::Run() {
 
             int bitPos = boardPosY * 9 + boardPosX;
             if (p.isLegal(bitPos)) {
-                p.makeMove(std::bitset<81>(1) << bitPos);
+                p.makeMove(bitPos);
                 AITurn ^= true;
             }
         }
